@@ -35,6 +35,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -51,4 +52,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation (libs.library)
+    implementation ("androidx.activity:activity-compose:1.6.1")
 }
