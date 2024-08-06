@@ -69,6 +69,7 @@ class InstructorStreamFragment : Fragment(), ConnectChecker, SurfaceHolder.Callb
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        if (rtmpCamera1.isOnPreview) rtmpCamera1.stopPreview()
         rtmpCamera1.startPreview(CameraHelper.Facing.BACK, 1280, 720)
     }
 
