@@ -5,20 +5,22 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.ui.AppBarConfiguration
 import com.pedro.common.ConnectChecker
 import com.pedro.encoder.input.video.CameraHelper
 import com.pedro.library.rtmp.RtmpCamera1
-import com.pedro.library.view.OpenGlView
 import com.rodbailey.openglviewrootencoderproblem.databinding.FragmentInstructorStreamBinding
 
-class InstructorStreamFragment : Fragment(), ConnectChecker, SurfaceHolder.Callback {
-    private lateinit var appBarConfiguration: AppBarConfiguration
+/**
+ * Why does OPTION 2 work but OPTION 1 does not? (see [onCreateView]).
+ */
+class InstructorStreamFragment :
+    Fragment(),
+    ConnectChecker by NullConnectChecker(),
+    SurfaceHolder.Callback  {
+
     private lateinit var binding: FragmentInstructorStreamBinding
-    private lateinit var rtmpCamera1: RtmpCamera1
-    private lateinit var openGLView: OpenGlView
+    private val myCameraHolder =  MyCameraHolder()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,42 +28,16 @@ class InstructorStreamFragment : Fragment(), ConnectChecker, SurfaceHolder.Callb
         savedInstanceState: Bundle?,
     ): View {
         super.onCreate(savedInstanceState)
-
         binding = FragmentInstructorStreamBinding.inflate(inflater, container, false)
 
-        openGLView = binding.surfaceView
-        rtmpCamera1 = RtmpCamera1(openGLView, this)
-        openGLView.holder.addCallback(this)
+        // OPTION 1: This doesn't work - which makes no sense to me.
+//        myCameraHolder.save(binding.surfaceView, this)
 
+        // OPTION 2: This does work.
+        myCameraHolder.save(RtmpCamera1(binding.surfaceView, this))
+
+        binding.surfaceView.holder.addCallback(this)
         return binding.root
-    }
-
-    override fun onAuthError() {
-
-    }
-
-    override fun onAuthSuccess() {
-
-    }
-
-    override fun onConnectionFailed(reason: String) {
-
-    }
-
-    override fun onConnectionStarted(url: String) {
-
-    }
-
-    override fun onConnectionSuccess() {
-
-    }
-
-    override fun onDisconnect() {
-
-    }
-
-    override fun onNewBitrate(bitrate: Long) {
-
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -69,12 +45,14 @@ class InstructorStreamFragment : Fragment(), ConnectChecker, SurfaceHolder.Callb
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        if (rtmpCamera1.isOnPreview) rtmpCamera1.stopPreview()
-        rtmpCamera1.startPreview(CameraHelper.Facing.BACK, 1280, 720)
+        if (myCameraHolder.camera()!!.isOnPreview) {
+            myCameraHolder.camera()!!.stopPreview()
+        }
+        myCameraHolder.camera()!!.startPreview(CameraHelper.Facing.BACK, 640, 480)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        rtmpCamera1.stopPreview()
+        myCameraHolder.camera()!!.stopPreview()
     }
-
 }
+
