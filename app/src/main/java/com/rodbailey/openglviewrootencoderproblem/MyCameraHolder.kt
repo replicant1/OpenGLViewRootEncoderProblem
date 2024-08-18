@@ -14,6 +14,11 @@ class MyCameraHolder() {
         rtmpCamera1 = value
     }
 
+    /**
+     * As Pedro advises, changing the type of the [surfaceView] parameter to "OpenGlView"
+     * makes the OPTION 1 work. There are two RtmpCamera1 constructors - one that takes a
+     * [SurfaceView] and another that takes an OpenGlView.
+     */
     fun save(surfaceView: SurfaceView, connectChecker: ConnectChecker) {
         rtmpCamera1 = RtmpCamera1(surfaceView, connectChecker)
     }

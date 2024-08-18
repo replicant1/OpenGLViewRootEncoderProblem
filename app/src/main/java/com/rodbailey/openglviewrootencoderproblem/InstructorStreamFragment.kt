@@ -31,6 +31,7 @@ class InstructorStreamFragment :
         binding = FragmentInstructorStreamBinding.inflate(inflater, container, false)
 
         // OPTION 1: This doesn't work - which makes no sense to me.
+        // See [MyCameraHolder#save] for explanation of how to fix OPTION 1.
 //        myCameraHolder.save(binding.surfaceView, this)
 
         // OPTION 2: This does work.
