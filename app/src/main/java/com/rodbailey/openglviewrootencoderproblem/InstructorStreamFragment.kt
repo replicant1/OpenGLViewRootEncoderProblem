@@ -49,7 +49,13 @@ class InstructorStreamFragment :
         if (myCameraHolder.camera()!!.isOnPreview) {
             myCameraHolder.camera()!!.stopPreview()
         }
-        myCameraHolder.camera()!!.startPreview(CameraHelper.Facing.BACK, 640, 480)
+
+        // Hard code a resolution that your phone's camera supports. If the width and height
+        // are the same, the preview is distorted. Otherwise, the preview is fine.
+        // On a Google Pixel 6:
+        // a) width = 1080, height = 1080 shows a distorted preview.
+        // b) width = 640, height = 480 works fine
+        myCameraHolder.camera()!!.startPreview(CameraHelper.Facing.BACK, 1080, 1080)
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
